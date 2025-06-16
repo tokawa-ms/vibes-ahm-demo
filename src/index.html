@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Tetris - 80年代スタイル</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'pixel': ['Courier New', 'monospace']
+                    },
+                    colors: {
+                        'neon-green': '#39ff14',
+                        'neon-blue': '#1b03a3',
+                        'neon-pink': '#ff073a',
+                        'neon-yellow': '#ffff00',
+                        'retro-bg': '#0a0a0a'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-retro-bg text-neon-green font-pixel overflow-hidden">
+    <!-- Background grid pattern -->
+    <div class="fixed inset-0 opacity-20 pointer-events-none">
+        <div class="absolute inset-0" style="background-image: repeating-linear-gradient(90deg, #39ff14 0px, transparent 1px, transparent 20px, #39ff14 21px), repeating-linear-gradient(0deg, #39ff14 0px, transparent 1px, transparent 20px, #39ff14 21px);"></div>
+    </div>
+
+    <!-- Game Container -->
+    <div class="relative z-10 min-h-screen flex items-center justify-center p-4">
+        <div class="game-container bg-black border-4 border-neon-green rounded-lg p-6 shadow-2xl">
+            <!-- Header -->
+            <div class="text-center mb-6">
+                <h1 class="text-4xl font-bold text-neon-yellow mb-2 animate-pulse">
+                    ⚡ RETRO TETRIS ⚡
+                </h1>
+                <div class="text-neon-blue text-sm">~ 80年代スタイル ~</div>
+            </div>
+
+            <!-- Game Info Panel -->
+            <div class="flex justify-between items-start mb-4">
+                <div class="bg-gray-900 border-2 border-neon-blue p-3 rounded">
+                    <div class="text-neon-blue mb-2">SCORE</div>
+                    <div id="score" class="text-neon-yellow text-xl font-bold">0</div>
+                    <div class="text-neon-blue mb-2 mt-3">LEVEL</div>
+                    <div id="level" class="text-neon-yellow text-xl font-bold">1</div>
+                    <div class="text-neon-blue mb-2 mt-3">LINES</div>
+                    <div id="lines" class="text-neon-yellow text-xl font-bold">0</div>
+                </div>
+
+                <!-- Next Piece Preview -->
+                <div class="bg-gray-900 border-2 border-neon-pink p-3 rounded">
+                    <div class="text-neon-pink mb-2">NEXT</div>
+                    <canvas id="next-canvas" width="80" height="80" class="border border-gray-600"></canvas>
+                </div>
+            </div>
+
+            <!-- Game Board -->
+            <div class="flex justify-center mb-4">
+                <canvas id="game-canvas" width="300" height="600" class="border-4 border-neon-green bg-black"></canvas>
+            </div>
+
+            <!-- Controls Info -->
+            <div class="bg-gray-900 border-2 border-neon-yellow p-3 rounded text-center">
+                <div class="text-neon-yellow text-sm mb-2">CONTROLS</div>
+                <div class="grid grid-cols-2 gap-2 text-xs text-neon-green">
+                    <div>← → : 移動</div>
+                    <div>↑ : 回転</div>
+                    <div>↓ : 高速落下</div>
+                    <div>SPACE : 瞬間落下</div>
+                </div>
+            </div>
+
+            <!-- Game Controls -->
+            <div class="flex justify-center gap-4 mt-4">
+                <button id="start-btn" class="px-6 py-2 bg-neon-green text-black font-bold rounded hover:bg-green-400 transition-colors">
+                    START
+                </button>
+                <button id="pause-btn" class="px-6 py-2 bg-neon-yellow text-black font-bold rounded hover:bg-yellow-400 transition-colors">
+                    PAUSE
+                </button>
+                <button id="reset-btn" class="px-6 py-2 bg-neon-pink text-black font-bold rounded hover:bg-pink-400 transition-colors">
+                    RESET
+                </button>
+            </div>
+
+            <!-- Audio Controls -->
+            <div class="flex justify-center gap-2 mt-3">
+                <button id="music-btn" class="px-4 py-1 bg-neon-blue text-white text-sm rounded hover:bg-blue-600 transition-colors">
+                    🎵 BGM
+                </button>
+                <div id="audio-indicator" class="px-4 py-1 bg-gray-700 text-neon-green text-sm rounded">
+                    音量: <span id="volume-display">50%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Overlay -->
+    <div id="game-over" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+        <div class="bg-black border-4 border-neon-pink p-8 rounded-lg text-center">
+            <h2 class="text-3xl font-bold text-neon-pink mb-4 animate-pulse">GAME OVER</h2>
+            <div class="text-neon-yellow mb-2">FINAL SCORE</div>
+            <div id="final-score" class="text-4xl font-bold text-neon-green mb-4">0</div>
+            <button id="restart-btn" class="px-6 py-2 bg-neon-green text-black font-bold rounded hover:bg-green-400 transition-colors">
+                PLAY AGAIN
+            </button>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
