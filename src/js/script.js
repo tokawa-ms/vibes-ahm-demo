@@ -600,7 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // モバイル用コントロール追加
 function addMobileControls() {
     const mobileControls = document.createElement('div');
-    mobileControls.className = 'mobile-controls fixed bottom-4 left-1/2 transform -translate-x-1/2 flex flex-wrap justify-center gap-2 bg-black bg-opacity-80 p-4 rounded-lg border-2 border-neon-green';
+    mobileControls.className = 'mobile-controls';
     
     const controls = [
         { text: '←', action: () => game.movePiece(-1, 0) },
@@ -613,7 +613,7 @@ function addMobileControls() {
     controls.forEach(control => {
         const button = document.createElement('button');
         button.textContent = control.text;
-        button.className = 'bg-neon-green text-black font-bold rounded text-lg';
+        button.className = 'bg-neon-green text-black font-bold rounded';
         button.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (game.gameRunning && !game.gamePaused) {
