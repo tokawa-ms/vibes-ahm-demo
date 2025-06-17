@@ -33,6 +33,8 @@ class RetroTetris {
         this.audioContext = null;
         this.isMusicPlaying = false;
         this.musicVolume = 0.5;
+        this.musicTimeout = null;
+        this.activeOscillators = [];
         
         this.initializeTetrominos();
         this.initializeColors();
@@ -252,6 +254,7 @@ class RetroTetris {
     
     // リセット
     reset() {
+        this.stopMusic(); // BGMをいったん停止
         this.board = this.createBoard();
         this.score = 0;
         this.lines = 0;
@@ -519,14 +522,25 @@ class RetroTetris {
             gainNode.gain.linearRampToValueAtTime(this.musicVolume * 0.1, startTime + 0.01);
             gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + note.duration);
             
+            // Track active oscillator
+            this.activeOscillators.push(oscillator);
+            
             oscillator.start(startTime);
             oscillator.stop(startTime + note.duration);
+            
+            // Remove oscillator from active list when it ends
+            oscillator.onended = () => {
+                const index = this.activeOscillators.indexOf(oscillator);
+                if (index > -1) {
+                    this.activeOscillators.splice(index, 1);
+                }
+            };
             
             startTime += note.duration;
         }
         
         // メロディーをループ
-        setTimeout(() => {
+        this.musicTimeout = setTimeout(() => {
             if (this.isMusicPlaying) {
                 this.playMelody();
             }
@@ -535,6 +549,22 @@ class RetroTetris {
     
     stopMusic() {
         this.isMusicPlaying = false;
+        
+        // Cancel pending timeout
+        if (this.musicTimeout) {
+            clearTimeout(this.musicTimeout);
+            this.musicTimeout = null;
+        }
+        
+        // Stop all active oscillators
+        this.activeOscillators.forEach(oscillator => {
+            try {
+                oscillator.stop();
+            } catch (e) {
+                // Oscillator may already be stopped
+            }
+        });
+        this.activeOscillators = [];
     }
     
     toggleMusic() {
